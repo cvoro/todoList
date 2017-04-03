@@ -41,7 +41,7 @@
         <td> <input type="text" id="title" [(ngModel)]="dataa.title" placeholder="Title"></td>
         <button (click)="update(dataa)" class="btn btn-default">Update</button>
     </tr>
-    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    <pagination-controls class="my-pagination" (pageChange)="p = $event"></pagination-controls>
 </table>
 <!--<div *ngIf="loading">Loading....</div>-->
 
