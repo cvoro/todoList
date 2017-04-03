@@ -19,7 +19,7 @@ import { CustomFormsModule } from 'ng2-validation'
  //import {SmartTables} from './smartTables/smartTables.component';
 
 //import {BusyModule} from 'angular2-busy';
-
+import {Ng2PaginationModule} from 'ng2-pagination';
 import { CommonModule }  from '@angular/common';
  
  import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
@@ -35,7 +35,8 @@ import { CommonModule }  from '@angular/common';
     HttpModule,
     AppRoutingModule,
     CustomFormsModule,
-      SlimLoadingBarModule.forRoot()
+      SlimLoadingBarModule.forRoot(),
+      Ng2PaginationModule
   ],
   //schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
    exports: [BrowserModule, SlimLoadingBarModule],

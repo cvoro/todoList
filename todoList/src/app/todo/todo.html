@@ -19,7 +19,7 @@
         <button (click)="addUser(user1)" class="btn btn-default">Add</button>
     </tr>
 
-    <tr *ngFor="let lis of list; let i = index" contenteditable="true">
+    <tr *ngFor="let i = index; let lis of list | paginate: { itemsPerPage: 10, currentPage: p }" contenteditable="true">
         <td>{{lis.date | date}}</td>
 
         <td> <input type="checkbox" placeholder="Status" [(ngModel)]="lis.status" />
@@ -41,6 +41,7 @@
         <td> <input type="text" id="title" [(ngModel)]="dataa.title" placeholder="Title"></td>
         <button (click)="update(dataa)" class="btn btn-default">Update</button>
     </tr>
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
 </table>
 <!--<div *ngIf="loading">Loading....</div>-->
 
