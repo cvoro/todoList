@@ -18,9 +18,12 @@ import { CustomFormsModule } from 'ng2-validation'
 
  //import {SmartTables} from './smartTables/smartTables.component';
 
+//import {BusyModule} from 'angular2-busy';
 
 import { CommonModule }  from '@angular/common';
  
+ import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+
 
 @NgModule({
   declarations: [
@@ -31,10 +34,11 @@ import { CommonModule }  from '@angular/common';
     FormsModule,
     HttpModule,
     AppRoutingModule,
-    CustomFormsModule
-   
+    CustomFormsModule,
+      SlimLoadingBarModule.forRoot()
   ],
   //schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+   exports: [BrowserModule, SlimLoadingBarModule],
   providers: [AuthGuard, TodoGuard],
   bootstrap: [AppComponent]
 })

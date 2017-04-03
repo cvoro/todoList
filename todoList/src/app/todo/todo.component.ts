@@ -5,6 +5,10 @@ import {List} from '../models/list';
 import { Router, ActivatedRoute } from '@angular/router';
 import {AlertService} from '../services/alert.service';
 
+import 'rxjs/Rx'; 
+
+import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
+
 import {AuthenticationService} from '../services/authentication.service';
 
 
@@ -12,8 +16,9 @@ import {AuthenticationService} from '../services/authentication.service';
   selector: 'todo',
   templateUrl: './todo.html',
   styleUrls: ['../app.component.css'],
-  providers:[UserService,AuthenticationService]
+  providers:[UserService,AuthenticationService],
 })
+
 export class TodoComponent implements OnInit{
   title = 'this is todo list';
   list: List[] = [];
@@ -24,6 +29,7 @@ export class TodoComponent implements OnInit{
   dataa={
     index: null
   };
+  loading = false;
   visible: true;
 returnUrl: string;
 error = "";
@@ -82,24 +88,28 @@ showEdit = false;
 // ];
 
 
-constructor(private userServce: UserService, private hangeDetectorRef: ChangeDetectorRef){}
+constructor(private userServce: UserService, private hangeDetectorRef: ChangeDetectorRef,private slimLoadingBarService: SlimLoadingBarService){}
 
 // ngOninit(){
 //   this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/login';
 // }
 
  ngOnInit(){
-    return this.userServce.getAll().subscribe(
+   this.startLoading()
+   this.loading = true;
+  return this.userServce.getAll().delay(1500).subscribe(
                 list=>this.list = list,
                 err => this.error = "Popuni polja pravinlno",
-                () => console.log('Task Complete')
+                () => {this.completeLoading()
+                  this.loading = false}
         );
   }
    getList(){
+     this.startLoading()
     return this.userServce.getAll().subscribe(
                 list=>this.list = list,
                 err => this.error = "Popuni polja pravinlno",
-                () => console.log('Task Complete')
+                () => this.completeLoading()
         );
   }
   // deleteList(i){
@@ -107,20 +117,19 @@ constructor(private userServce: UserService, private hangeDetectorRef: ChangeDet
   //    this.list.splice(i,1);
   // }
   deleteUser(i,id){
+     this.startLoading()
     return this.userServce.deleteUser(id).subscribe(
                 data => {this.list.splice(i,1)
                 this.error = "";
               console.log(i)},
                 err => console.log(err.status),
-                () => console.log('Task Complete')
+                () => this.completeLoading()
                 );
   }
 
   update(user){
     this.error="";
-   if(user=={}){
-      this.error="Chose object to be edited"
-                }else{
+     this.startLoading()
     return this.userServce.update(user).subscribe(
                 data => {console.log("updated")
               this.error = "";
@@ -128,10 +137,10 @@ constructor(private userServce: UserService, private hangeDetectorRef: ChangeDet
           this.list[user.index]= data
           },
                 err => this.error = "Enter proper date",
-                () => console.log('Task Complete')
+                () => this.completeLoading()
                 );
 
-                }
+                
   }
   edit(user, i){
     this.showEdit = true; 
@@ -145,14 +154,27 @@ constructor(private userServce: UserService, private hangeDetectorRef: ChangeDet
   addUser(user1){
     // user1.date = Date.now();
     // console.log(user1.date)
+     this.startLoading()
        return this.userServce.addUser(user1).subscribe(
                 data =>{ this.getList()
                 this.error = ""},
                   err => this.error = "Enter proper date",
-                () => console.log('Task Complete')
+                () => this.completeLoading()
                 );
   }
+startLoading() {
+        this.slimLoadingBarService.start(() => {
+            console.log('Loading complete');
+        });
+    }
 
+    stopLoading() {
+        this.slimLoadingBarService.stop();
+    }
+
+    completeLoading() {
+        this.slimLoadingBarService.complete();
+    }
   // change(lis){
   //   console.log(lis)
   // var a = document.getElementById('date')
